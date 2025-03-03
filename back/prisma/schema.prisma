@@ -1,8 +1,58 @@
-generator client {
-  provider = "prisma-client-js"
+datasource db {
+  provider = "mysql"              
+  url      = env("DATABASE_URL") 
 }
 
-datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+generator client {
+  provider = "prisma-client-js" 
+}
+
+model IUSer {
+  id          Int                @id @default(autoincrement())
+  name        String
+  email       String             @unique
+  password    String
+  pokemons    IPokemon[]         
+  userBalls   PokedexUserBall[]  
+}
+
+
+model Pokedex {
+  id                 Int                @id @default(autoincrement())
+  name               String
+  capture_percentual Decimal
+  quantityToPlayer   Int
+  userBalls          PokedexUserBall[] 
+}
+
+
+model PokedexUserBall {
+  id          Int      @id @default(autoincrement())
+  userId      Int      // Relacionamento com o usuário
+  pokedexId   Int      // Relacionamento com o tipo de Pokébola
+  quantity    Int      // Quantidade de Pokébolas que o usuário tem
+  IUSer       IUSer    @relation(fields: [userId], references: [id])
+  Pokedex     Pokedex  @relation(fields: [pokedexId], references: [id])
+}
+
+model Ability {
+  id    Int     @id @default(autoincrement())
+  name  String
+  Pokemons PokemonToAbility[]
+}
+
+model PokemonToAbility {
+  id        Int     @id @default(autoincrement())
+  ability   Ability @relation(fields: [idAbility], references: [id])
+  idAbility Int
+  pokemon   IPokemon @relation(fields: [idPokemon], references: [id])
+  idPokemon Int
+  sprite    String
+}
+
+model IPokemon {
+  id          Int     @id @default(autoincrement())
+  name        String
+  abilities   PokemonToAbility[]
+  usersHaveIt IUSer[]
 }
