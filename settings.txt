@@ -1,0 +1,34 @@
+installing prisma:
+
+npm install prisma --save-dev
+npm install @prisma/client
+
+create a migration : thas create or update your tables
+npx prisma migrate dev
+
+runing seed to insert mock datas :
+npx prisma db seed
+
+
+
+- thats needs to be in schema.prisma to connect
+
+    generator client {
+    provider = "prisma-client-js"
+    }
+
+    datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+    }
+
+
+- on the .env de sintax is like:
+
+    SECRET=my_secret_pass
+
+    DATABASE_URL="mysql://root:root@localhost:3307/my_database"
+    
+- seed: is an  archive to create initial datas or testing datas
+
+async tasks: uma tarefa que pode levar algum tempo para ser concluída, como consultas a bancos de dados, requisições de rede, leituras de arquivos, entre outros.
