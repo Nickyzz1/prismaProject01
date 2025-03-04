@@ -1,5 +1,5 @@
 {
-  "name": "aulassenai",
+  "name": "projeto_prisma",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,6 +11,9 @@
   "author": "",
   "license": "ISC",
   "type": "module",
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "devDependencies": {
     "@prisma/client": "^6.4.1",
     "@types/config": "^3.3.5",
@@ -32,7 +35,6 @@
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.10.1"
+    "jsonwebtoken": "^9.0.2"
   }
 }

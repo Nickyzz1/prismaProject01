@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import { prisma } from '../../prisma/prisma.ts'
 import jwt from 'jsonwebtoken'
+import CryptoJS from "crypto-js";
 
 export class authControler {
     static register = async (req: Request, res: Response) => {
@@ -8,6 +9,8 @@ export class authControler {
         const {name, email, password} = req.body;
 
         // Criptografando a senha
+        if(!process.env.SECRET_KEY)
+            res.status(500).send("internal server error")
         const encryptedPassword = CryptoJS.AES.encrypt(password, process.env.SECRET_KEY as string).toString();
         
         try {
@@ -15,7 +18,7 @@ export class authControler {
             const allPokedex = await prisma.pokedex.findMany();
 
             // Criando o usuário e associando todas as Pokébolas já existentes com a quantidade definida no banco
-            await prisma.iUser.create({
+            await prisma.iUSer.create({
                 data: {
                     name: name,
                     email: email,
@@ -46,14 +49,14 @@ export class authControler {
         try {
             
             // Gerando o token JWT
-            const secret = process.env.SECRET;
+            const secret = process.env.SECRET_KEY;
             const token = jwt.sign(
             { id: user?.id },
             secret as string,
             { expiresIn: '30d' }  // Token válido por 30 dias
             );
         
-            res.status(200).send(`Logado com sucesso : ${token}`)
+            res.status(200).send(`TOKEN : ${token}`)
         
         } catch (error) {
             res.status(500).send(`Internal server error: ${error}`)
