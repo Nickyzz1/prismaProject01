@@ -2,15 +2,14 @@ import { Request, Response } from "express"
 import { prisma } from '../../prisma/prisma.ts'
 import CryptoJS from "crypto-js";
 
-export class userController {
-   
+export class UserController {
 
     static getOneUser = async (req : Request, res : Response) => {
-
+        // just get one user if the id exists on database, one future fiature is implement a filter to get just image, biograph and name of the user
         const id = req.params.id;
         const user = await prisma.iUSer.findUnique({where : {id :parseInt(id)}})
         res.status(200).send(user)
-
+        return
     }
 
     static updateuser = async (req : Request, res : Response) => {
@@ -26,17 +25,18 @@ export class userController {
             if (pokemons) updatedData.pokemons = pokemons;
             if (userballs) updatedData.userballs = userballs
 
-
             await prisma.iUSer.update({
                 where: { id: parseInt(id) },  
                 data: updatedData,  
             });
 
-            res.status(200);
+            res.status(200)
+            return
 
         } catch (error) {
             console.error(error);
             res.status(500).send("Erro ao atualizar o usuário");
+            return
         }
     }
 
@@ -46,19 +46,21 @@ export class userController {
         try {
             // Primeiro, exclui os registros relacionado
             await prisma.iUSer.update({
-                where: { id: id }, // Converte id para número
+                where: { id: id }, 
                 data: { pokemons: { set: [] } } // Remove todos os vínculos com pokémons
             });
             
             await prisma.pokedexUserBall.deleteMany({ where: { userId: id } });
-    
             // Agora, exclui o usuário
             await prisma.iUSer.delete({ where: { id } });
     
             res.status(200).send("Usuário deletado com sucesso!");
+            return
+
         } catch (error) {
             console.error(error);
             res.status(500).send("Erro ao deletar o usuário");
+            return
         }
     };
 }

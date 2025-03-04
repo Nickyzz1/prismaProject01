@@ -3,7 +3,7 @@ import { prisma } from '../../prisma/prisma.ts'
 import jwt from 'jsonwebtoken'
 import CryptoJS from "crypto-js";
 
-export class authControler {
+export class AuthControler {
     static register = async (req: Request, res: Response) => {
 
         const {name, email, password} = req.body;

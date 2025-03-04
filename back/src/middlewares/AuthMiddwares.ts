@@ -3,11 +3,12 @@ import { prisma } from "../../prisma/prisma.ts";
 import CryptoJS from "crypto-js";
 
 export const validateLogin = async (req: Request, res: Response, next: NextFunction) => {
+
     const { email, password } = req.body;
 
     if (!email || !password) {
-        
         res.status(400).send("Todos os campos obrigatórios devem ser preenchidos!");
+        return
     }
 
     const userExists = await prisma.iUSer.findUnique({ where: { email: email } });
@@ -30,7 +31,6 @@ export const validateLogin = async (req: Request, res: Response, next: NextFunct
     next();
 };
 
-
 export const validateRegister =  async (req : Request, res : Response,  next: NextFunction) => {
     
     const {name, email, password} = req.body
@@ -39,9 +39,13 @@ export const validateRegister =  async (req : Request, res : Response,  next: Ne
         res.status(400).send("Informações faltantes")
         return
     }
+
     const userExists = await prisma.iUSer.findUnique({where :  {email : email}})
-    if(userExists) res.status(400).send("Usuário já cadastrad0")
+
+    if(userExists) { 
+        res.status(400).send("Usuário já cadastrad0")
+        return
+    }
 
     next(); 
-
 }

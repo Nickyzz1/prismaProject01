@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import { prisma } from "../../prisma/prisma.ts";
 
-export class userMiddware{
+export class userMiddware {
     static validateId = async (req: Request, res: Response, next: NextFunction) => {
         
         const id = req.params.id;

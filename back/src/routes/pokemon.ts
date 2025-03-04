@@ -1,5 +1,5 @@
 import express, { Router } from 'express'
-import {fetchPokemon} from '../controllers/pokemonController.ts'
+import {fetchPokemon} from '../controllers/PokemonController.ts'
 
 const router : Router = express.Router()
 
