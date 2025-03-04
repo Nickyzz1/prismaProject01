@@ -31,12 +31,17 @@ export const validateLogin = async (req: Request, res: Response, next: NextFunct
 };
 
 
-export const validateRegister =  async (req : Request, res : Response) => {
+export const validateRegister =  async (req : Request, res : Response,  next: NextFunction) => {
     
     const {name, email, password} = req.body
 
-    if(!name || !email || !password) {res.status(400).send("Informações faltantes")}
+    if(!name || !email || !password) {
+        res.status(400).send("Informações faltantes")
+        return
+    }
     const userExists = await prisma.iUSer.findUnique({where :  {email : email}})
-    if(userExists) { res.status(400).send("Usuário já cadastrad0") }
+    if(userExists) res.status(400).send("Usuário já cadastrad0")
+
+    next(); 
 
 }

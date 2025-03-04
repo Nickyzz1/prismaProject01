@@ -4,8 +4,8 @@ import {userMiddware} from '../middlewares/userMiddwares.ts'
 
 const router : Router = express.Router()
 
-router.get('./user/:id',  userMiddware.validateId, userController.getOneUser)
-router.post('./update/:id', userMiddware.validateId, userController.updateuser)
-router.post('./delete/:id',  userMiddware.validateId, userController.deleteuser)
+router.get('/:id',  userMiddware.validateId, userController.getOneUser)
+router.put('/update/:id', userMiddware.validateId, userController.updateuser)
+router.delete('/delete/:id',  userMiddware.validateId, userController.deleteuser)
 
 export default router;

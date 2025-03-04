@@ -6,11 +6,17 @@ export class userMiddware{
         
         const id = req.params.id;
        
-        if (!id) { res.status(400).send("ID é obrigatório")}
+        if (!id) { 
+            res.status(400).send("ID é obrigatório")
+            return
+        }
 
         const user = await prisma.iUSer.findUnique({ where: { id: parseInt(id) } });
 
-        if (!user) { res.status(404).send("Usuário não encontrado!")}
+        if (!user) { 
+            res.status(404).send("Usuário não encontrado!")
+            return
+        }
 
         next();
     };

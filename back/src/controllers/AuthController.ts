@@ -56,7 +56,7 @@ export class authControler {
             { expiresIn: '30d' }  // Token válido por 30 dias
             );
         
-            res.status(200).send(`TOKEN : ${token}`)
+            res.status(200).send(`TOKEN : ${token}\nID: ${user?.id}`)
         
         } catch (error) {
             res.status(500).send(`Internal server error: ${error}`)
