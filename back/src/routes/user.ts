@@ -8,3 +8,4 @@ router.get('./user/:id',  userMiddware.validateId, userController.getOneUser)
 router.post('./update/:id', userMiddware.validateId, userController.updateuser)
 router.post('./delete/:id',  userMiddware.validateId, userController.deleteuser)
 
+export default router;

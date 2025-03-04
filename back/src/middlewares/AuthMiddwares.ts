@@ -3,9 +3,9 @@ import { prisma } from "../../prisma/prisma.ts";
 import CryptoJS from "crypto-js";
 
 export const validateLogin = async (req: Request, res: Response, next: NextFunction) => {
-    const { email, pass } = req.body;
+    const { email, password } = req.body;
 
-    if (!email || !pass) {
+    if (!email || !password) {
         res.status(400).send("Todos os campos obrigatórios devem ser preenchidos!");
     }
 
@@ -14,7 +14,7 @@ export const validateLogin = async (req: Request, res: Response, next: NextFunct
     if (userExists && process.env.SECRET) {
         const bytes = CryptoJS.AES.decrypt(userExists.password, process.env.SECRET);
         const decryptedPassword = bytes.toString(CryptoJS.enc.Utf8);
-        if (decryptedPassword !== pass) { 
+        if (decryptedPassword !== password) { 
             res.status(401).send("Senha incorreta.")
         }
     } else {
@@ -29,9 +29,9 @@ export const validateLogin = async (req: Request, res: Response, next: NextFunct
 
 export const validateRegister =  async (req : Request, res : Response) => {
     
-    const {name, email, pass} = req.body
+    const {name, email, password} = req.body
 
-    if(!name || !email || !pass) {res.status(400).send("Informações faltantes")}
+    if(!name || !email || !password) {res.status(400).send("Informações faltantes")}
     const userExists = await prisma.iUSer.findUnique({where :  {email : email}})
     if(userExists) {res.status(400).send("Usuário já cadastrad0") }
 }

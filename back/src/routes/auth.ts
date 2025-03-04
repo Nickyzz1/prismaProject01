@@ -5,3 +5,5 @@ import { authControler } from "../controllers/AuthController.ts";
 const router : Router = express.Router()
 router.post('/login', validateLogin, authControler.login )
 router.post('/register', validateRegister, authControler.register )
+
+export default router;

@@ -1,4 +1,4 @@
-import { IPokemon } from '../services/pokemonService.ts'
+import { IPokemon } from './IPokemonService.ts'
 
 export interface IUser {
     name : string,
