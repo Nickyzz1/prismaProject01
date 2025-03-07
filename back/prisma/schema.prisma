@@ -13,46 +13,61 @@ model IUSer {
   email       String             @unique
   password    String
   pokemons    IPokemon[]         
-  userBalls   PokedexUserBall[]  
+  userBalls   UserPokeball[]  
+  pokedex     Pokedex []
 }
 
-
-model Pokedex {
+model PokeBall {
   id                 Int                @id @default(autoincrement())
   name               String
+  image              String
   capture_percentual Decimal
-  quantityToPlayer   Int
-  userBalls          PokedexUserBall[] 
+  userPokeball       UserPokeball[] 
 }
 
-
-model PokedexUserBall {
+model Pokedex {
   id          Int      @id @default(autoincrement())
-  userId      Int      // Relacionamento com o usuário
-  pokedexId   Int      // Relacionamento com o tipo de Pokébola
-  quantity    Int      // Quantidade de Pokébolas que o usuário tem
   IUSer       IUSer    @relation(fields: [userId], references: [id])
-  Pokedex     Pokedex  @relation(fields: [pokedexId], references: [id])
-}
-
-model Ability {
-  id    Int     @id @default(autoincrement())
-  name  String
-  Pokemons PokemonToAbility[]
-}
-
-model PokemonToAbility {
-  id        Int     @id @default(autoincrement())
-  ability   Ability @relation(fields: [idAbility], references: [id])
-  idAbility Int
+  userId Int
   pokemon   IPokemon @relation(fields: [idPokemon], references: [id])
   idPokemon Int
-  sprite    String
+}
+
+model UserPokeball {
+  id          Int      @id @default(autoincrement())
+  IUSer       IUSer    @relation(fields: [userId], references: [id])
+  Pokeball    PokeBall @relation(fields: [pokeballId], references: [id])
+  userId      Int
+  pokeballId  Int      
+  quantity    Int     
 }
 
 model IPokemon {
   id          Int     @id @default(autoincrement())
   name        String
-  abilities   PokemonToAbility[]
+  baseExperience Int
+  speed Int
+  hp Int
+  attack Int
+  defense  Int
+  image String
+  imageShiny String
   usersHaveIt IUSer[]
+  crie String
+  pokedex Pokedex []
 }
+
+// model Ability {
+//   id    Int     @id @default(autoincrement())
+//   name  String
+//   Pokemons PokemonToAbility[]
+// }
+
+// model PokemonToAbility {
+//   id        Int     @id @default(autoincrement())
+//   ability   Ability @relation(fields: [idAbility], references: [id])
+//   idAbility Int
+//   pokemon   IPokemon @relation(fields: [idPokemon], references: [id])
+//   idPokemon Int
+//   sprite    String
+// }

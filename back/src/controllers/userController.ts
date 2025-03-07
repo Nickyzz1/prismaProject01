@@ -1,36 +1,29 @@
 import { Request, Response } from "express"
 import { prisma } from '../../prisma/prisma.ts'
 import CryptoJS from "crypto-js";
-
+import { IUserIdDto } from "../dto/user/IUserDto.ts"
+import { userService } from "../service/userService.ts";
+import { IUserDto } from "../dto/user/IUserDto.ts";
 export class UserController {
 
-    static getOneUser = async (req : Request, res : Response) => {
+    static getOneUser = async (req : Request<{ id: number}>, res : Response) => {
         // just get one user if the id exists on database, one future fiature is implement a filter to get just image, biograph and name of the user
-        const id = req.params.id;
-        const user = await prisma.iUSer.findUnique({where : {id :parseInt(id)}})
-        res.status(200).send(user)
-        return
+        const dataUser : IUserIdDto  = req.params;
+        try {
+            const user = await userService.getOneUserService(dataUser)
+            res.status(200).send(user)
+            return
+        } catch (error) {
+            res.status(404).send("User não encontrado")
+            return
+        }
     }
 
     static updateuser = async (req : Request, res : Response) => {
-        const id = req.params.id;
-        const {name, email, password, pokemons, userballs } = req.body
-
+        const data : IUserDto = req.body
         try {
-            const updatedData: any = {};
-
-            if (name) updatedData.name = name;
-            if (email) updatedData.email = email;
-            if (password) updatedData.password = CryptoJS.AES.encrypt(password, process.env.SECRET_KEY as string).toString();
-            if (pokemons) updatedData.pokemons = pokemons;
-            if (userballs) updatedData.userballs = userballs
-
-            await prisma.iUSer.update({
-                where: { id: parseInt(id) },  
-                data: updatedData,  
-            });
-
-            res.status(200)
+            const response = await userService.updateuser(data)
+            res.status(200).send("User atualizado com sucesso")
             return
 
         } catch (error) {
@@ -40,23 +33,12 @@ export class UserController {
         }
     }
 
-    static deleteuser = async (req: Request, res: Response) => {
-        const id = parseInt(req.params.id);
-    
+    static deleteuser = async (req : Request<{ id: number}>, res: Response) => {
+        const data : IUserIdDto  = req.params;
         try {
-            // Primeiro, exclui os registros relacionado
-            await prisma.iUSer.update({
-                where: { id: id }, 
-                data: { pokemons: { set: [] } } // Remove todos os vínculos com pokémons
-            });
-            
-            await prisma.pokedexUserBall.deleteMany({ where: { userId: id } });
-            // Agora, exclui o usuário
-            await prisma.iUSer.delete({ where: { id } });
-    
+            const user = await userService.deleteuser(data)
             res.status(200).send("Usuário deletado com sucesso!");
             return
-
         } catch (error) {
             console.error(error);
             res.status(500).send("Erro ao deletar o usuário");
