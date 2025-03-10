@@ -10,9 +10,9 @@ async function seed() {
   ];
 
   // Inserting ...
-  for (const ball of pokebolas) {
-    await prisma.
-  }
+  // for (const ball of pokebolas) {
+  //   await prisma.
+  // }
 
   console.log("Pokébolas criadas com sucesso!");
 }

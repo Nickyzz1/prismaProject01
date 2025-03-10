@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {Request, Response } from 'express'
+import { IPokemon } from '../dto/pokemon/pokeDto.ts';
 
 export const fetchPokemon = async (req: Request, res : Response) => {
 
@@ -19,27 +20,54 @@ export const fetchPokemon = async (req: Request, res : Response) => {
         "Golem", "Ponyta", "Rapidash", "Slowpoke", "Slowbro", "Magnemite", "Magneton",
         "Farfetch'd", "Doduo", "Dodrio", "Seel", "Dewgong", "Grimer", "Muk", "Shellder",
         "Cloyster", "Gastly", "Haunter", "Gengar", "Onix", "Drowzee", "Hypno", "Krabby",
-        "Kingler", "Voltorb", "Electrode", "Exeggcute", "Exeggutor", "Cubone", "Marowak"
+        "Kingler", "Voltorb", "Electrode", "Exeggcute", "Exeggutor", "Cubone", "Marowak",
+        "Hitmonlee", "Hitmonchan", "Lickitung",
+        "Koffing", "Weezing", "Rhyhorn", "Rhydon", "Chansey", "Tangela", "Kangaskhan",
+        "Horsea", "Seadra", "Goldeen", "Seaking", "Staryu", "Starmie", "Mr. Mime",
+        "Scyther", "Jynx", "Electabuzz", "Magmar", "Pinsir", "Tauros", "Magikarp",
+        "Gyarados", "Lapras", "Ditto", "Eevee", "Vaporeon", "Jolteon", "Flareon",
+        "Porygon", "Omanyte", "Omastar", "Kabuto", "Kabutops", "Aerodactyl", "Snorlax",
+        "Articuno", "Zapdos", "Moltres", "Dratini", "Dragonair", "Dragonite",
+        "Mewtwo", "Mew"
     ];
 
     try {
-        const randomIndex: number = Math.floor(Math.random() * firstGenPokemon.length)
-        const pokemonName = firstGenPokemon[randomIndex]
-        const pokemon = (await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`)).data
-        const {abilities, sprites } = pokemon;
-  
-        // Mapeando as habilidades para pegar somente as desejadas
-        const filteredPokemon = {
-            name: pokemonName,
-            abilities: abilities.map((item: any) => item.ability.name), // no front : pegar quantidade
-            sprite: sprites
+        const randomIndex: number = Math.floor(Math.random() * firstGenPokemon.length);
+        const pokemonName = firstGenPokemon[randomIndex];
+        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
+        const data = response.data;
+    
+        const pokemon: IPokemon = {
+            id: data.id,
+            name: data.name,
+            base_experience: data.base_experience,
+            stats: data.stats.map((s: any) => ({
+                base_stat: s.base_stat,
+                stat: {
+                    name: s.stat.name,
+                },
+            })),
+            sprites: {
+                front_default: data.sprites.front_default,
+                front_shiny: data.sprites.front_shiny,
+                back_default: data.sprites.back_default,
+                back_shiny: data.sprites.back_shiny,
+                other: {
+                    "official-artwork": {
+                        front_default: data.sprites.other["official-artwork"]?.front_default || "",
+                        front_shiny: data.sprites.other["official-artwork"]?.front_shiny || "",
+                    },
+                },
+            },
+            species: {
+                name: data.species.name,
+            },
         };
-
-        res.json(filteredPokemon);
-                
-        } catch (error) {
-            res.status(500).send('Falha ao fazer requisição para API')
-        }
+        res.json(pokemon);
+    } catch (error) {
+        res.status(500).send("Falha ao fazer requisição para API: " + error);
+    }
+    
 }
 
 
