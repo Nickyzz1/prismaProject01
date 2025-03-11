@@ -15,6 +15,7 @@ model IUSer {
   pokemons    IPokemon[]         
   userBalls   UserPokeball[]  
   pokedex     Pokedex []
+  money       Int
 }
 
 model PokeBall {

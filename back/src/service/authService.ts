@@ -16,7 +16,8 @@ export class AuthService {
             data: {
                 name: name,
                 email: email,
-                password: encryptedPassword
+                password: encryptedPassword,
+                money : 10
             }
         });
     }
