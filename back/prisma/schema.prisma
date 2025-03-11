@@ -22,7 +22,8 @@ model PokeBall {
   name               String
   image              String
   capture_percentual Decimal
-  userPokeball       UserPokeball[] 
+  userPokeball       UserPokeball[]
+  price              Int
 }
 
 model Pokedex {
@@ -41,7 +42,6 @@ model UserPokeball {
   pokeballId  Int      
   quantity    Int     
 }
-
 model IPokemon {
   id          Int     @id @default(autoincrement())
   name        String
@@ -57,17 +57,3 @@ model IPokemon {
   pokedex Pokedex []
 }
 
-// model Ability {
-//   id    Int     @id @default(autoincrement())
-//   name  String
-//   Pokemons PokemonToAbility[]
-// }
-
-// model PokemonToAbility {
-//   id        Int     @id @default(autoincrement())
-//   ability   Ability @relation(fields: [idAbility], references: [id])
-//   idAbility Int
-//   pokemon   IPokemon @relation(fields: [idPokemon], references: [id])
-//   idPokemon Int
-//   sprite    String
-// }
