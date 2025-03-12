@@ -1,8 +1,8 @@
 import axios from 'axios'
 import {Request, Response } from 'express'
 import { IPokemon } from '../dto/pokemon/pokeDto.ts';
-import { IPokeball } from '../dto/pokemon/pokeballDto.ts';
-import { jwtDecode } from 'jwt-decode';
+import jwt from "jsonwebtoken";
+import { prisma } from '../lib/prisma.ts';
 
 const firstGenPokemon: string[] = [
     "Bulbasaur", "Ivysaur", "Venusaur", "Charmander", "Charmeleon", "Charizard",
@@ -32,7 +32,6 @@ const firstGenPokemon: string[] = [
 ];
 export class pokemonService {
     static getPokemonService = async (req: Request, res : Response) => {
-
         try {
             const randomIndex: number = Math.floor(Math.random() * firstGenPokemon.length);
             const pokemonName = firstGenPokemon[randomIndex];
@@ -72,16 +71,89 @@ export class pokemonService {
         }
     }
 
-    static buyPokeballsService = (req : Request, res : Response, ) => {
-        const {pokeball : IPokeball } = req.body
-        const token = req.headers.authorization
-        if(!token)
-            res.status(401).send("Não permitido!")
-        if(token) {
-            const userInfo = jwtDecode(token);
-            console.log(userInfo); 
+    static buyPokeballsService = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const { pokeballId } = req.body;
+    
+            if (!pokeballId) {
+                res.status(400).send("ID da Pokébola não foi enviado.");
+                return; // Apenas retorna após a resposta para não continuar a execução.
+            }
+            
+            const token = req.headers.authorization?.split(" ")[1]; // Remove "Bearer " do token
+    
+            if (!token) {
+                res.status(401).send("Não permitido!");
+                return; // Retorna após enviar a resposta
+            }
+    
+            const decoded = jwt.verify(token, process.env.SECRET_KEY as string) as { id: number };
+            
+            if (!decoded.id) {
+                res.status(401).send("Token inválido!");
+                return; // Retorna após enviar a resposta
+            }
+            
+            console.log("Usuário identificado:", decoded.id);
+            
+            const userId = decoded.id;
+            const user = await prisma.iUSer.findUnique({
+                where: { id: userId }
+            });
+    
+            if (!user) {
+                res.status(404).send("Usuário não encontrado.");
+                return; // Retorna após enviar a resposta
+            }
+    
+            const pokeball = await prisma.pokeBall.findUnique({
+                where: { id: pokeballId }
+            });
+    
+            if (!pokeball) {
+                res.status(404).send("Pokébola não encontrada.");
+                return; // Retorna após enviar a resposta
+            }
+    
+            if (user.money < pokeball.price) {
+                res.status(400).send("Dinheiro insuficiente.");
+                return; // Retorna após enviar a resposta
+            }
+    
+            const updatedUser = await prisma.iUSer.update({
+                where: { id: userId },
+                data: { money: user.money - pokeball.price }
+            });
+    
+            const existingUserPokeball = await prisma.userPokeball.findFirst({
+                where: { userId, pokeballId }
+            });
+    
+            if (existingUserPokeball) {
+                await prisma.userPokeball.update({
+                    where: { id: existingUserPokeball.id },
+                    data: { quantity: existingUserPokeball.quantity + 1 }
+                });
+            } else {
+                await prisma.userPokeball.create({
+                    data: {
+                        userId,
+                        pokeballId,
+                        quantity: 1
+                    }
+                });
+            }
+    
+            res.status(200).send({
+                message: "Pokébola comprada com sucesso!",
+                saldoAtual: updatedUser.money
+            });
+    
+        } catch (error) {
+            console.error("Erro ao comprar Pokébola:", error);
+            res.status(500).send("Erro interno do servidor.");
         }
-
     }
+    
     
 }

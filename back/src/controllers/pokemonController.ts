@@ -1,8 +1,4 @@
-import axios from 'axios'
 import {Request, Response } from 'express'
-import { IPokemon } from '../dto/pokemon/pokeDto.ts';
-import { IPokeball } from '../dto/pokemon/pokeballDto.ts';
-import { jwtDecode } from 'jwt-decode';
 import { pokemonService } from '../service/pokemonService.ts';
 export class PokemonController{
     static getPokemon = async (req: Request, res : Response) => {
@@ -15,13 +11,21 @@ export class PokemonController{
             res.status(500).send("Falha ao consultar API")
         }
     }
+
+    static buyPokeballs = async (req: Request, res: Response) => { // Corrigido: req primeiro, depois res
+        try {
+            const buyed = await pokemonService.buyPokeballsService(req, res);
     
-    static buyPokeballs = async (res : Response, req : Request) => {
-        const buyed = await pokemonService.buyPokeballsService(req, res)
-        if(buyed == null || buyed == undefined){
-            res.status(500).send("Falha ao consultar API")
+            if (buyed == undefined) {
+                res.status(500).send("Falha ao consultar API");
+                return
+            }
+            res.status(200).send(buyed);
+        } catch (error) {
+            console.error("Erro ao comprar Pokébola:", error);
+            res.status(500).send("Erro interno do servidor");
         }
-    }
+    };
 }
 
 

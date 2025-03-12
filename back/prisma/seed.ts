@@ -20,8 +20,6 @@ async function seed() {
       }
     });
   }
-  
-
   console.log("Pokébolas criadas com sucesso!");
 }
 

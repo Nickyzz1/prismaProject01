@@ -13,24 +13,31 @@ export class AuthControler {
         try {
             await AuthService.register(data)
             res.status(200).send("Usuário criado com sucesso");
+            return
         } catch (error) {
             console.error(error);
             res.status(500).send("Erro interno ao registrar o usuário");
+            return
         }
     }
 
-    static login = async (req : Request, res : Response) => {
-        const data : login = req.body
-        const response =  await AuthService.loginUser(data)
+    static login = async (req: Request, res: Response): Promise<void> => {
         try {
-            if (!response || !response.token || !response.user) 
-                return res.status(400).send("Erro: Usuário ou token ausente");
-            console.log(response.token)
-            res.status(200).send(`Logado com sucesso!`);
-            res.set("Authorization", `Bearer ${response.token}`)
+            const data: login = req.body;
+            const response = await AuthService.loginUser(data);
+    
+            if (!response || !response.token || !response.user) {
+                res.status(400).send("Erro: Usuário ou token ausente");
+                return;
+            }
+            res.set("Authorization", `Bearer ${response.token}`);
+            console.log("Authorization", `Bearer ${response.token}`)
+            res.status(200).send("Logado com sucesso!");
+            return
         } catch (error) {
             console.error("Erro ao fazer login:", error);
             res.status(500).send("Erro interno do servidor");
+            return
         }
-    }
+    };    
 }

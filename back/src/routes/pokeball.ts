@@ -3,5 +3,5 @@ import { PokemonController } from '../controllers/pokemonController.ts'
 
 const router : Router = express.Router()
 
-router.get('/pokemon', PokemonController.getPokemon)
+router.post('/pokeball', PokemonController.buyPokeballs)
 export default router
