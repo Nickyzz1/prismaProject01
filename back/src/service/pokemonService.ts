@@ -180,8 +180,5 @@ export class pokemonService {
         let percent = Math.min(Math.max(chanceCapture * randomFactor * 100, 1), 100);
 
         return percent;
-
     }
-    
-    
 }

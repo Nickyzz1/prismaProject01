@@ -29,6 +29,24 @@ export class PokemonController{
             return
         }
     };
+
+    static huntPokemon = async(req : Request, res:Response):Promise<void> => {
+        try {
+            const huntPercent = await pokemonService.huntPokemon(req, res);
+    
+            if (huntPercent) {
+                res.status(200).send({
+                    message: "Pokébola comprada com sucesso!",
+                }).json(huntPercent)
+                return
+            }
+        } catch (error) {
+            console.error("Erro ao comprar Pokébola:", error);
+            res.status(500).send("Erro interno do servidor");
+            return
+        }
+
+    }
 }
 
 
