@@ -45,7 +45,6 @@ export class PokemonController{
             res.status(500).send("Erro interno do servidor");
             return
         }
-
     }
 }
 
