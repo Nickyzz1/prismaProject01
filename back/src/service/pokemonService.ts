@@ -158,6 +158,30 @@ export class pokemonService {
             return false;
         }
     }
+
+    static huntPokemon = async (req: Request, res : Response): Promise<number | void> => {
+        const {pokemonId, pokeball} = req.body
+        
+        const pokeFinded = await prisma.iPokemon.findUnique({where : {id : pokemonId}})
+        if(!pokeFinded) {
+            res.status(404).send('Pokemon não encontrado!')
+            return
+        }
+
+        const pokeballFinded = await prisma.pokeBall.findUnique({where : {id : pokemonId}})
+        if(!pokeballFinded) {
+            res.status(404).send('Pokebola não encontrado!')
+            return
+        }
+        const chanceBase = (Number(pokeFinded.baseExperience) + Number(pokeFinded.hp)) / 
+        (Number(pokeFinded.defense) + Number(pokeFinded.attack) + Number(pokeFinded.speed));
+        const chanceCapture = chanceBase * (Number(pokeballFinded.capture_percentual) / 100)
+        const randomFactor = Math.floor(Math.random() * 31);
+        let percent = Math.min(Math.max(chanceCapture * randomFactor * 100, 1), 100);
+
+        return percent;
+
+    }
     
     
 }
