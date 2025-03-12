@@ -4,6 +4,7 @@ import { IPokemon } from '../dto/pokemon/pokeDto.ts';
 import jwt from "jsonwebtoken";
 import { prisma } from '../lib/prisma.ts';
 
+// lista de pokemons da primeira geração
 const firstGenPokemon: string[] = [
     "Bulbasaur", "Ivysaur", "Venusaur", "Charmander", "Charmeleon", "Charizard",
     "Squirtle", "Wartortle", "Blastoise", "Caterpie", "Metapod", "Butterfree",
@@ -31,13 +32,17 @@ const firstGenPokemon: string[] = [
     "Mewtwo", "Mew"
 ];
 export class pokemonService {
-    static getPokemonService = async (req: Request, res : Response) => {
+
+    // Pega o pokemon e seus atributos filtrados
+    static getPokemonService = async (req: Request, res : Response): Promise<IPokemon | boolean> => {
         try {
+            // Sorteando numero aleatório
             const randomIndex: number = Math.floor(Math.random() * firstGenPokemon.length);
             const pokemonName = firstGenPokemon[randomIndex];
+            // Promisse espera resposta da API
             const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
+
             const data = response.data;
-        
             const pokemon: IPokemon = {
                 id: data.id,
                 name: data.name,
@@ -68,30 +73,33 @@ export class pokemonService {
         
         } catch (error) {
             res.status(500).send("Falha ao fazer requisição para API: " + error);
+            return false; // rertorna false poisn não consegui fazer a consulta na API
         }
     }
 
-    static buyPokeballsService = async (req: Request, res: Response): Promise<void> => {
+    static buyPokeballsService = async (req: Request, res: Response): Promise<boolean> => {
         try {
-            const { pokeballId } = req.body;
+            const {pokeballId} = req.body; // o id é enviado no body, a probliedade dentro dsas chaves deve ser exatamanete igual a que é enviada no json. Ex no body: {"pokeballId": 1}
     
             if (!pokeballId) {
                 res.status(400).send("ID da Pokébola não foi enviado.");
-                return; // Apenas retorna após a resposta para não continuar a execução.
+                console.log(req.body)
+                return false; // Apenas retorna após a resposta para não continuar a execução.
             }
             
             const token = req.headers.authorization?.split(" ")[1]; // Remove "Bearer " do token
     
             if (!token) {
                 res.status(401).send("Não permitido!");
-                return; // Retorna após enviar a resposta
+                return false; // Retorna após enviar a resposta
             }
     
-            const decoded = jwt.verify(token, process.env.SECRET_KEY as string) as { id: number };
+            const decoded = jwt.verify(token, 
+            process.env.SECRET_KEY as string) as { id: number };
             
             if (!decoded.id) {
                 res.status(401).send("Token inválido!");
-                return; // Retorna após enviar a resposta
+                return false; // Retorna após enviar a resposta
             }
             
             console.log("Usuário identificado:", decoded.id);
@@ -103,7 +111,7 @@ export class pokemonService {
     
             if (!user) {
                 res.status(404).send("Usuário não encontrado.");
-                return; // Retorna após enviar a resposta
+                return false; // Retorna após enviar a resposta
             }
     
             const pokeball = await prisma.pokeBall.findUnique({
@@ -112,12 +120,12 @@ export class pokemonService {
     
             if (!pokeball) {
                 res.status(404).send("Pokébola não encontrada.");
-                return; // Retorna após enviar a resposta
+                return  false; // Retorna após enviar a resposta
             }
     
             if (user.money < pokeball.price) {
                 res.status(400).send("Dinheiro insuficiente.");
-                return; // Retorna após enviar a resposta
+                return  false; // Retorna após enviar a resposta
             }
     
             const updatedUser = await prisma.iUSer.update({
@@ -143,15 +151,11 @@ export class pokemonService {
                     }
                 });
             }
-    
-            res.status(200).send({
-                message: "Pokébola comprada com sucesso!",
-                saldoAtual: updatedUser.money
-            });
+            return true;
     
         } catch (error) {
-            console.error("Erro ao comprar Pokébola:", error);
-            res.status(500).send("Erro interno do servidor.");
+
+            return false;
         }
     }
     

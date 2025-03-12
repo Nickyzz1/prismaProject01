@@ -1,2 +1,8 @@
 npx prisma db seed
 npx prisma migrate dev
+
+erros: 
+
+cannot set headder after they are sent to thye client:
+
+Consegui resolver. Estava usando o res.send duas vezes no mesmo fluxo.

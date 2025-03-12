@@ -1,6 +1,7 @@
 import {Request, Response } from 'express'
 import { pokemonService } from '../service/pokemonService.ts';
 export class PokemonController{
+
     static getPokemon = async (req: Request, res : Response) => {
         const pokemon = await pokemonService.getPokemonService(req, res);
         try {
@@ -12,18 +13,20 @@ export class PokemonController{
         }
     }
 
-    static buyPokeballs = async (req: Request, res: Response) => { // Corrigido: req primeiro, depois res
+    static buyPokeballs = async (req: Request, res: Response): Promise<void> => { 
         try {
             const buyed = await pokemonService.buyPokeballsService(req, res);
     
-            if (buyed == undefined) {
-                res.status(500).send("Falha ao consultar API");
+            if (buyed) {
+                res.status(200).send({
+                    message: "Pokébola comprada com sucesso!",
+                });
                 return
             }
-            res.status(200).send(buyed);
         } catch (error) {
             console.error("Erro ao comprar Pokébola:", error);
             res.status(500).send("Erro interno do servidor");
+            return
         }
     };
 }
