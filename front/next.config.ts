@@ -11,11 +11,11 @@ const nextConfig = {
   rewrites: () => 
   { 
       return [
-          // {
-          //   source: "/",
-          //   destination: "/home",
+          {
+            source: "/",
+            destination: "/home",
 
-          // },
+          },
           {
             source: "/login",
             destination: "/login"
