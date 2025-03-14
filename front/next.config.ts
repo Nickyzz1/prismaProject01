@@ -20,6 +20,10 @@ const nextConfig = {
             destination: "/login"
           },
           {
+            source: "/selectMap",
+            destination: "/selectMap"
+          },
+          {
             source: "/register",
             destination: "/register"
           },
@@ -29,8 +33,13 @@ const nextConfig = {
           },
           {
             source: "/game",
-            destination: "/game"
+            destination: "/gameMitico"
           },
+          {
+            source: "/gameCuritiba",
+            destination: "/gameCuritiba"
+          },
+      
       ]
   }
 };

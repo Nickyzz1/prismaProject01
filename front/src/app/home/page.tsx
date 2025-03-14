@@ -24,7 +24,7 @@ const Home = () => {
                 <Image className="bg-white w-110 rounded-xl m-2 p-2" src={window} alt="" />
                 
                 <div className="flex w-full items-center justify-center max-w-4/5 gap-3 rounded-xl">
-                <Link href={ROUTES.start}>
+                <Link href={ROUTES.selectMap}>
                     <Image className="min-w-20 max-w-22 h-auto cursor-pointer hover:scale-x-110 p-2" src={start} alt="" />
                 </Link>
                 <Link href={ROUTES.home}>

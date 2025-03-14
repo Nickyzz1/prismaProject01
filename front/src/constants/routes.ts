@@ -3,5 +3,7 @@ export enum ROUTES {
     login = "/login",
     register = "/register",
     start = '/messageStart',
-    game = '/game'
+    game = '/gameMitico',
+    selectMap = '/selectMap',
+    gameCuritiba = '/gameCuritiba'
 }
