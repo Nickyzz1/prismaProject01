@@ -6,6 +6,8 @@ import signIn from '../../../public/4.png'
 import arrow from '../../../public/arrow.png'
 import account from '../../../public/createaccount.png'
 import clould from '../../../public/clould.png'
+import { ROUTES } from "@/constants/routes";
+import Link from "next/link";
 
 const Home = () => {
 
@@ -18,18 +20,26 @@ const Home = () => {
                 <Image className="w-full object-contain" src={clould} alt="" />
                 </div>
             </div>
-            <div className="flex z-10 p-2  gap-6 rounded-xl flex-col items-center justify-center bg-blue-200">
+            <div className="flex z-10 p-2 m-2 rounded-xl flex-col items-center justify-center bg-blue-200">
                 <Image className="bg-white w-110 rounded-xl m-2 p-2" src={window} alt="" />
                 
                 <div className="flex gap-3 rounded-xl">
-                <Image className="w-30 h-auto cursor-pointer hover:scale-x-110" src={start} alt="" />
-                <Image className="w-30 h-auto cursor-pointer hover:scale-x-110" src={menu} alt="" />
-                <Image className="w-30 h-auto cursor-pointer hover:scale-x-110" src={signIn} alt="" />
+                <Link href={ROUTES.home}>
+                    <Image className="max-w-30 h-auto cursor-pointer hover:scale-x-110 p-2" src={start} alt="" />
+                </Link>
+                <Link href={ROUTES.home}>
+                    <Image className="max-w-30 h-auto cursor-pointer hover:scale-x-110 p-2" src={menu} alt="" />
+                </Link>
+                <Link href={ROUTES.login}>
+                    <Image className="max-w-30 h-auto cursor-pointer hover:scale-x-110 p-2" src={signIn} alt="" />
+                </Link>
                 </div>
 
-                <div className="flex items-center justify-center">
-                <Image className="w-20 h-auto animate-bounce" src={arrow} alt="" />
-                <Image className="w-60 h-auto cursor-pointer hover:scale-x-110" src={account} alt="" />
+                <div className="flex gap-3 items-center justify-center">
+                    <Image className="w-12 h-auto animate-bounce" src={arrow} alt="" />
+                    <Link href={ROUTES.register} >
+                        <Image className="w-60 h-auto cursor-pointer hover:scale-x-110" src={account} alt="" />
+                    </Link>
                 </div>
             </div>
             <div className="flex justify-between  z-0 relative flex-col w-full object-cover p-4">
