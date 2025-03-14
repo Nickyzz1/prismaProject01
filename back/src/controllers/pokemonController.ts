@@ -39,8 +39,7 @@ export class PokemonController{
                     message: "Pokébola comprada com sucesso!",
                 }).json(huntPercent)
                 return
-            }
-        } catch (error) {
+            } } catch (error) {
             console.error("Erro ao comprar Pokébola:", error);
             res.status(500).send("Erro interno do servidor");
             return
