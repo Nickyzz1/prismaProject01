@@ -1,5 +1,5 @@
 import Image from "next/image";
-import window from '../../../public/window.png'
+import window from '../../../public/paisagens/window.png'
 import start from '../../../public/2.png'
 import menu from '../../../public/3.png'
 import signIn from '../../../public/4.png'
@@ -24,7 +24,7 @@ const Home = () => {
                 <Image className="bg-white w-110 rounded-xl m-2 p-2" src={window} alt="" />
                 
                 <div className="flex w-full items-center justify-center max-w-4/5 gap-3 rounded-xl">
-                <Link href={ROUTES.home}>
+                <Link href={ROUTES.start}>
                     <Image className="min-w-20 max-w-22 h-auto cursor-pointer hover:scale-x-110 p-2" src={start} alt="" />
                 </Link>
                 <Link href={ROUTES.home}>

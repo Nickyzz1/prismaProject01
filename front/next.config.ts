@@ -14,7 +14,6 @@ const nextConfig = {
           {
             source: "/",
             destination: "/home",
-
           },
           {
             source: "/login",
@@ -23,7 +22,15 @@ const nextConfig = {
           {
             source: "/register",
             destination: "/register"
-        },
+          },
+          {
+            source: "/start",
+            destination: "/messageStart"
+          },
+          {
+            source: "/game",
+            destination: "/game"
+          },
       ]
   }
 };

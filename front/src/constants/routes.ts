@@ -1,5 +1,7 @@
 export enum ROUTES {
     home = "/",
     login = "/login",
-    register = "/register"
+    register = "/register",
+    start = '/messageStart',
+    game = '/game'
 }
