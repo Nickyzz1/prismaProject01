@@ -96,15 +96,15 @@ const pageMitico  = () => {
        
 
             <div>
-                <Image  width={10} height={10} className="" src={images[paisage]} alt="paisagem">
+                <Image  width={100} height={100} className="" src={images[paisage]} alt="paisagem">
                 </Image>
 
                 {num > 90 && data?.sprites.back_shiny && (
-                    <Image  width={10} height={10} className="" src={data.sprites.back_shiny} alt="paisagem" />
+                    <Image  width={100} height={100} className="" src={data.sprites.back_shiny} alt="paisagem" />
                 )}
 
                 {num <= 90 && data?.sprites.back_default && (
-                    <Image   width={10} height={10}  className="" src={data.sprites.back_default} alt="paisagem" />
+                    <Image   width={100} height={100}  className="" src={data.sprites.back_default} alt="paisagem" />
                 )}
             </div>
         
