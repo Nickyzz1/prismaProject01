@@ -5,5 +5,6 @@ export enum ROUTES {
     start = '/messageStart',
     game = '/gameMitico',
     selectMap = '/selectMap',
-    gameCuritiba = '/gameCuritiba'
+    gameCuritiba = '/gameCuritiba',
+    pageMitico = '/pageMitico',
 }

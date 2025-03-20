@@ -3,9 +3,9 @@ const nextConfig = {
 
   images:
   {
-      remotePatterns: [
-          {protocol: "https", 
-          hostname: "pokeapi.co"}]
+    remotePatterns: [{protocol: "http", hostname: "localhost", port: "8080"}],
+    domains: ["raw.githubusercontent.com"],
+
   },
 
   rewrites: () => 
@@ -38,6 +38,10 @@ const nextConfig = {
           {
             source: "/gameCuritiba",
             destination: "/gameCuritiba"
+          },
+          {
+            source : "/pageMItico",
+            destination : "/pageMItico"
           },
       
       ]
